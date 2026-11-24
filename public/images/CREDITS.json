@@ -1,0 +1,130 @@
+{
+ "hero": {
+  "file": "public/images/hero.jpg",
+  "w": 4096,
+  "h": 2304,
+  "src": "File:Dim sum at Yu Garden restaurant, Hamburg.jpg",
+  "bytes": 337047,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Dim_sum_at_Yu_Garden_restaurant%2C_Hamburg.jpg/1920px-Dim_sum_at_Yu_Garden_restaurant%2C_Hamburg.jpg"
+ },
+ "signature-siomay": {
+  "file": "public/images/signature-siomay.jpg",
+  "w": 5184,
+  "h": 3888,
+  "src": "File:Homemade style pork shumai in Hong Kong.jpg",
+  "bytes": 321352,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Homemade_style_pork_shumai_in_Hong_Kong.jpg/1920px-Homemade_style_pork_shumai_in_Hong_Kong.jpg"
+ },
+ "signature-hakau": {
+  "file": "public/images/signature-hakau.jpg",
+  "w": 4096,
+  "h": 3072,
+  "src": "File:Steamed Har gow \u6c34\u6676\u8766\u9903 hau kau dumplings Chinese New Year \u8fb2\u66c6\u65b0\u5e74 food 29 January 2025 \u86c7 Philippines8.jpg",
+  "bytes": 431868,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Steamed_Har_gow_%E6%B0%B4%E6%99%B6%E8%9D%A6%E9%A4%83_hau_kau_dumplings_Chinese_New_Year_%E8%BE%B2%E6%9B%86%E6%96%B0%E5%B9%B4_food_29_January_2025_%E8%9B%87_Philippines8.jpg/1920px-Steamed_Har_gow_%E6%B0%B4%E6%99%B6%E8%9D%A6%E9%A4%83_hau_kau_dumplings_Chinese_New_Year_%E8%BE%B2%E6%9B%86%E6%96%B0%E5%B9%B4_food_29_January_2025_%E8%9B%87_Philippines8.jpg"
+ },
+ "signature-bakpao": {
+  "file": "public/images/signature-bakpao.jpg",
+  "w": 5472,
+  "h": 3648,
+  "src": "File:Baozi, Au Petit Grain de Sel, Paris 001.jpg",
+  "bytes": 372084,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Baozi%2C_Au_Petit_Grain_de_Sel%2C_Paris_001.jpg/1920px-Baozi%2C_Au_Petit_Grain_de_Sel%2C_Paris_001.jpg"
+ },
+ "signature-xlb": {
+  "file": "public/images/signature-xlb.jpg",
+  "w": 2449,
+  "h": 1584,
+  "src": "File:Xiao Long Bao at Shanghai Wind, Vancouver.jpg",
+  "bytes": 459239,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Xiao_Long_Bao_at_Shanghai_Wind%2C_Vancouver.jpg/1920px-Xiao_Long_Bao_at_Shanghai_Wind%2C_Vancouver.jpg"
+ },
+ "signature-ceker": {
+  "file": "public/images/signature-ceker.jpg",
+  "w": 2560,
+  "h": 2560,
+  "src": "File:2015 0410 Chicken feet dim sum.jpg",
+  "bytes": 722674,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/2015_0410_Chicken_feet_dim_sum.jpg/1920px-2015_0410_Chicken_feet_dim_sum.jpg"
+ },
+ "signature-cheungfun": {
+  "file": "public/images/signature-cheungfun.jpg",
+  "w": 5184,
+  "h": 3888,
+  "src": "File:A Rice noodles roll from Fat Kee Congee and Rice Noodle Rolls.jpg",
+  "bytes": 340945,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/A_Rice_noodles_roll_from_Fat_Kee_Congee_and_Rice_Noodle_Rolls.jpg/1920px-A_Rice_noodles_roll_from_Fat_Kee_Congee_and_Rice_Noodle_Rolls.jpg"
+ },
+ "signature-lumpia": {
+  "file": "public/images/signature-lumpia.jpg",
+  "w": 4080,
+  "h": 1836,
+  "src": "File:Pritong Lumpia.jpg",
+  "bytes": 321572,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/66/Pritong_Lumpia.jpg/1920px-Pritong_Lumpia.jpg"
+ },
+ "gallery-steamer": {
+  "file": "public/images/gallery-steamer.jpg",
+  "w": 3062,
+  "h": 2054,
+  "src": "File:Bamboo steamer-side stacked-fs PNr\u00b00729.jpg",
+  "bytes": 335994,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Bamboo_steamer-side_stacked-fs_PNr%C2%B00729.jpg/1920px-Bamboo_steamer-side_stacked-fs_PNr%C2%B00729.jpg"
+ },
+ "gallery-restaurant": {
+  "file": "public/images/gallery-restaurant.jpg",
+  "w": 2592,
+  "h": 1936,
+  "src": "File:HK Sai Ying Pun \u660e\u661f\u6d77\u9bae\u9152\u5bb6 Star Seafood Restaurant \u684c\u5e03 table cloth n \u9ede\u5fc3\u5361 dim sum card Aug-2013.JPG",
+  "bytes": 1287119,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/HK_Sai_Ying_Pun_%E6%98%8E%E6%98%9F%E6%B5%B7%E9%AE%AE%E9%85%92%E5%AE%B6_Star_Seafood_Restaurant_%E6%A1%8C%E5%B8%83_table_cloth_n_%E9%BB%9E%E5%BF%83%E5%8D%A1_dim_sum_card_Aug-2013.JPG/1920px-HK_Sai_Ying_Pun_%E6%98%8E%E6%98%9F%E6%B5%B7%E9%AE%AE%E9%85%92%E5%AE%B6_Star_Seafood_Restaurant_%E6%A1%8C%E5%B8%83_table_cloth_n_%E9%BB%9E%E5%BF%83%E5%8D%A1_dim_sum_card_Aug-2013.JPG"
+ },
+ "gallery-table": {
+  "file": "public/images/gallery-table.jpg",
+  "w": 3264,
+  "h": 2448,
+  "src": "File:Dim Sum at T. Pot (3787806882).jpg",
+  "bytes": 598458,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Dim_Sum_at_T._Pot_%283787806882%29.jpg/1920px-Dim_Sum_at_T._Pot_%283787806882%29.jpg"
+ },
+ "craft-shumai": {
+  "file": "public/images/craft-shumai.jpg",
+  "w": 5568,
+  "h": 3712,
+  "src": "File:DFC 6168 Steaming skewers of golden pork shumai ready to bite into at a street food stall in Klet Kaeo Sattahip.jpg",
+  "bytes": 367980,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/DFC_6168_Steaming_skewers_of_golden_pork_shumai_ready_to_bite_into_at_a_street_food_stall_in_Klet_Kaeo_Sattahip.jpg/1920px-DFC_6168_Steaming_skewers_of_golden_pork_shumai_ready_to_bite_into_at_a_street_food_stall_in_Klet_Kaeo_Sattahip.jpg"
+ },
+ "gallery-hargow2": {
+  "file": "public/images/gallery-hargow2.jpg",
+  "w": 4032,
+  "h": 2688,
+  "src": "File:Har Gow at Canal Luna restaurant, InterContinental Guangzhou Exhibition Center (20180923125523).jpg",
+  "bytes": 595870,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Har_Gow_at_Canal_Luna_restaurant%2C_InterContinental_Guangzhou_Exhibition_Center_%2820180923125523%29.jpg/1920px-Har_Gow_at_Canal_Luna_restaurant%2C_InterContinental_Guangzhou_Exhibition_Center_%2820180923125523%29.jpg"
+ },
+ "gallery-baobun": {
+  "file": "public/images/gallery-baobun.jpg",
+  "w": 6144,
+  "h": 8160,
+  "src": "File:Signature bun - Pig - Bun House 2025-01-07.jpg",
+  "bytes": 426907,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Signature_bun_-_Pig_-_Bun_House_2025-01-07.jpg/1920px-Signature_bun_-_Pig_-_Bun_House_2025-01-07.jpg"
+ },
+ "gallery-cheungfun2": {
+  "file": "public/images/gallery-cheungfun2.jpg",
+  "w": 4240,
+  "h": 2832,
+  "src": "File:Rice Noodle Roll - Chaozhou - 20170302 (1).jpg",
+  "bytes": 341822,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Rice_Noodle_Roll_-_Chaozhou_-_20170302_%281%29.jpg/1920px-Rice_Noodle_Roll_-_Chaozhou_-_20170302_%281%29.jpg"
+ },
+ "gallery-dimsum3": {
+  "file": "public/images/gallery-dimsum3.jpg",
+  "w": 2200,
+  "h": 2199,
+  "src": "File:Dim sum at Shi-Art Chinese Cuisine.jpg",
+  "bytes": 652369,
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Dim_sum_at_Shi-Art_Chinese_Cuisine.jpg/1920px-Dim_sum_at_Shi-Art_Chinese_Cuisine.jpg"
+ }
+}
