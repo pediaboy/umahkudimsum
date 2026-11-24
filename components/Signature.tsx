@@ -92,7 +92,7 @@ export default function Signature({ items, settings }: { items: MenuItem[]; sett
                       href={waOrderLink(settings, item.name, item.price)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-4 inline-flex w-fit items-center gap-2 border-b border-gold/0 pb-1 font-sans text-[10px] font-medium tracking-[0.24em] text-gold/80 uppercase transition-all duration-300 group-hover:border-gold/60 group-hover:text-gold"
+                      className="mt-3 inline-flex min-h-[44px] w-fit items-center gap-2 border-b border-gold/25 pb-1 font-sans text-[10px] font-medium tracking-[0.24em] text-gold/80 uppercase transition-all duration-300 group-hover:border-gold/70 group-hover:text-gold"
                     >
                       Pesan
                       <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.6} />

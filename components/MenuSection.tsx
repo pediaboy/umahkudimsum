@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Reveal, SectionHead } from "./ui";
 import { rupiah, waOrderLink } from "@/lib/format";
@@ -82,7 +83,7 @@ export default function MenuSection({
                 role="tab"
                 aria-selected={on}
                 onClick={() => setActive(t.slug)}
-                className={`shrink-0 border px-4 py-2.5 font-sans text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300 ${
+                className={`shrink-0 border px-4 py-3 font-sans text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300 ${
                   on
                     ? "border-gold bg-gold text-ink"
                     : "border-gold/25 text-ivory/60 hover:border-gold/50 hover:text-ivory"
@@ -107,13 +108,13 @@ export default function MenuSection({
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
                 {item.image ? (
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
-                    loading={i < 3 ? "eager" : "lazy"}
-                    decoding="async"
+                    fill
                     sizes="(max-width: 640px) 78vw, (max-width: 1024px) 46vw, 300px"
-                    className="grade h-full w-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
+                    quality={78}
+                    className="grade object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-maroon to-ink">
@@ -137,7 +138,7 @@ export default function MenuSection({
                     href={waOrderLink(settings, item.name, item.price)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 border border-gold/35 px-3 py-1.5 font-sans text-[9px] font-medium tracking-[0.16em] text-gold uppercase transition-colors hover:bg-gold hover:text-ink"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 border border-gold/35 px-3.5 py-2.5 font-sans text-[9px] font-medium tracking-[0.16em] text-gold uppercase transition-colors hover:bg-gold hover:text-ink"
                   >
                     Pesan
                     <ArrowUpRight className="h-3 w-3" strokeWidth={1.8} />

@@ -77,7 +77,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp UMAHKUDIMSUM"
-                className="flex h-10 w-10 items-center justify-center border border-gold/25 text-gold/80 transition-colors hover:bg-gold hover:text-ink"
+                className="flex h-11 w-11 items-center justify-center border border-gold/25 text-gold/80 transition-colors hover:bg-gold hover:text-ink"
               >
                 <MessageCircle className="h-4 w-4" strokeWidth={1.5} />
               </a>
@@ -86,7 +86,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram UMAHKUDIMSUM"
-                className="flex h-10 w-10 items-center justify-center border border-gold/25 text-gold/80 transition-colors hover:bg-gold hover:text-ink"
+                className="flex h-11 w-11 items-center justify-center border border-gold/25 text-gold/80 transition-colors hover:bg-gold hover:text-ink"
               >
                 <InstagramGlyph className="h-4 w-4" />
               </a>
@@ -96,12 +96,12 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           {COLS.map((c) => (
             <nav key={c.title} className="md:col-span-2" aria-label={c.title}>
               <p className="font-sans text-[9px] tracking-[0.26em] text-gold/60 uppercase">{c.title}</p>
-              <ul className="mt-4 space-y-2.5">
+              <ul className="mt-3">
                 {c.links.map((l) => (
                   <li key={l.label}>
                     <a
                       href={l.href}
-                      className="font-sans text-[12px] text-ivory/55 transition-colors hover:text-gold"
+                      className="inline-flex min-h-[44px] items-center font-sans text-[12px] text-ivory/55 transition-colors hover:text-gold"
                     >
                       {l.label}
                     </a>

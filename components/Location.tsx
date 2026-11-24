@@ -30,7 +30,7 @@ export default function Location({ settings }: { settings: SiteSettings }) {
                       href={settings.maps_url || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-block border-b border-gold/40 pb-0.5 font-sans text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:border-gold"
+                      className="mt-1 inline-flex min-h-[44px] items-center border-b border-gold/40 font-sans text-[10px] tracking-[0.18em] text-gold uppercase transition-colors hover:border-gold"
                     >
                       Buka di Google Maps
                     </a>

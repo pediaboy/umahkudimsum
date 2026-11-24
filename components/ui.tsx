@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, useEffect, type ReactNode, type MouseEvent as ReactMouseEvent } from "react";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -88,7 +89,11 @@ export function RevealWords({
       variants={{ hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } }}
     >
       {words.map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden align-bottom">
+        <span
+          key={i}
+          className="inline-block overflow-hidden align-bottom"
+          style={{ paddingBottom: "0.18em", marginBottom: "-0.18em" }}
+        >
           <motion.span
             className="inline-block"
             variants={{ hidden: { y: "110%" }, show: { y: 0 } }}
@@ -138,15 +143,20 @@ export function MaskImage({
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 1.15, ease: EASE }}
     >
-      <motion.img
-        src={src}
-        alt={alt}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        sizes={sizes}
+      <motion.div
+        className="absolute inset-0"
         style={reduce || !parallax ? undefined : { y, scale: 1.12 }}
-        className={`grade h-full w-full object-cover ${imgClassName ?? ""}`}
-      />
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          quality={80}
+          className={`grade object-cover ${imgClassName ?? ""}`}
+        />
+      </motion.div>
     </motion.div>
   );
 }

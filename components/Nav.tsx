@@ -46,7 +46,7 @@ export default function Nav({ settings }: { settings: SiteSettings }) {
       >
         <div className="shell flex h-[68px] items-center justify-between gap-4 md:h-[84px]">
           {/* brand */}
-          <a href="#atas" className="group flex items-center gap-3" aria-label="UMAHKUDIMSUM, ke atas">
+          <a href="#atas" className="group flex min-h-[44px] items-center gap-3 py-1" aria-label="UMAHKUDIMSUM, ke atas">
             <Seal size={38} className="shrink-0 transition-transform duration-500 group-hover:rotate-6" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-[15px] tracking-[0.2em] text-ivory md:text-[17px]">
@@ -64,7 +64,7 @@ export default function Nav({ settings }: { settings: SiteSettings }) {
               <a
                 key={l.href}
                 href={l.href}
-                className="group relative font-sans text-[12px] font-medium tracking-[0.16em] text-ivory/75 uppercase transition-colors hover:text-ivory"
+                className="group relative inline-flex min-h-[44px] items-center font-sans text-[12px] font-medium tracking-[0.16em] text-ivory/75 uppercase transition-colors hover:text-ivory"
               >
                 {l.label}
                 <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />

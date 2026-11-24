@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { RevealWords, MagneticLink } from "./ui";
 import { waLink } from "@/lib/format";
 import type { SiteSettings } from "@/lib/types";
@@ -25,13 +26,17 @@ export default function Hero({ settings }: { settings: SiteSettings }) {
     >
       {/* cinematic background */}
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y: imgY }}>
-        <img
-          src="/images/hero.jpg"
-          alt="Aneka dimsum dalam kantong bambu, disajikan hangat"
-          className="grade-strong h-[118%] w-full object-cover"
-          fetchPriority="high"
-          decoding="async"
-        />
+        <div className="relative h-[118%] w-full">
+          <Image
+            src="/images/hero.jpg"
+            alt="Aneka dimsum dalam kantong bambu, disajikan hangat"
+            fill
+            priority
+            quality={82}
+            sizes="100vw"
+            className="grade-strong object-cover"
+          />
+        </div>
       </motion.div>
 
       {/* grading + legibility overlays */}
@@ -127,7 +132,7 @@ export default function Hero({ settings }: { settings: SiteSettings }) {
           <div className="flex items-end sm:justify-end">
             <a
               href="#signature"
-              className="group inline-flex items-center gap-2 font-sans text-[10px] tracking-[0.28em] text-ivory/50 uppercase transition-colors hover:text-gold"
+              className="group inline-flex min-h-[44px] items-center gap-2 px-1 font-sans text-[10px] tracking-[0.28em] text-ivory/50 uppercase transition-colors hover:text-gold"
             >
               Gulir
               <ArrowDown className="h-3.5 w-3.5 animate-bounce text-gold/60" strokeWidth={1.5} />

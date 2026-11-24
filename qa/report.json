@@ -1,0 +1,173 @@
+[
+  {
+    "viewport": "mobile-360",
+    "scrollWidth": 1928,
+    "clientWidth": 360,
+    "horizontalOverflow": true,
+    "docHeight": 33001,
+    "imgCount": 32,
+    "broken": [],
+    "pending": 20,
+    "clipped": [],
+    "small": [
+      {
+        "text": "UMAHKUDIMSUMEST. 2014家",
+        "h": 17
+      },
+      {
+        "text": "Signature",
+        "h": 17
+      },
+      {
+        "text": "Menu",
+        "h": 17
+      },
+      {
+        "text": "Cerita",
+        "h": 17
+      },
+      {
+        "text": "Bahan",
+        "h": 17
+      },
+      {
+        "text": "Galeri",
+        "h": 17
+      }
+    ],
+    "kb": 2085,
+    "reqs": 23,
+    "h1Size": 32,
+    "h1Font": "Times New Roman"
+  },
+  {
+    "viewport": "mobile-390",
+    "scrollWidth": 1928,
+    "clientWidth": 390,
+    "horizontalOverflow": true,
+    "docHeight": 32869,
+    "imgCount": 32,
+    "broken": [],
+    "pending": 20,
+    "clipped": [],
+    "small": [
+      {
+        "text": "UMAHKUDIMSUMEST. 2014家",
+        "h": 17
+      },
+      {
+        "text": "Signature",
+        "h": 17
+      },
+      {
+        "text": "Menu",
+        "h": 17
+      },
+      {
+        "text": "Cerita",
+        "h": 17
+      },
+      {
+        "text": "Bahan",
+        "h": 17
+      },
+      {
+        "text": "Galeri",
+        "h": 17
+      }
+    ],
+    "kb": 2085,
+    "reqs": 22,
+    "h1Size": 32,
+    "h1Font": "Times New Roman"
+  },
+  {
+    "viewport": "tablet-portrait-768",
+    "scrollWidth": 1928,
+    "clientWidth": 768,
+    "horizontalOverflow": true,
+    "docHeight": 32146,
+    "imgCount": 32,
+    "broken": [],
+    "pending": 20,
+    "clipped": [],
+    "small": [
+      {
+        "text": "UMAHKUDIMSUMEST. 2014家",
+        "h": 17
+      },
+      {
+        "text": "Signature",
+        "h": 17
+      },
+      {
+        "text": "Menu",
+        "h": 17
+      },
+      {
+        "text": "Cerita",
+        "h": 17
+      },
+      {
+        "text": "Bahan",
+        "h": 17
+      },
+      {
+        "text": "Galeri",
+        "h": 17
+      }
+    ],
+    "kb": 2085,
+    "reqs": 22,
+    "h1Size": 32,
+    "h1Font": "Times New Roman"
+  },
+  {
+    "viewport": "tablet-landscape-1024",
+    "scrollWidth": 1928,
+    "clientWidth": 1024,
+    "horizontalOverflow": true,
+    "docHeight": 32330,
+    "imgCount": 32,
+    "broken": [],
+    "pending": 20,
+    "clipped": [],
+    "small": [],
+    "kb": 2085,
+    "reqs": 22,
+    "h1Size": 32,
+    "h1Font": "Times New Roman"
+  },
+  {
+    "viewport": "laptop-1280",
+    "scrollWidth": 1928,
+    "clientWidth": 1280,
+    "horizontalOverflow": true,
+    "docHeight": 32496,
+    "imgCount": 32,
+    "broken": [],
+    "pending": 21,
+    "clipped": [],
+    "small": [],
+    "kb": 2085,
+    "reqs": 22,
+    "h1Size": 32,
+    "h1Font": "Times New Roman"
+  },
+  {
+    "viewport": "desktop-1920",
+    "scrollWidth": 1928,
+    "clientWidth": 1920,
+    "horizontalOverflow": true,
+    "docHeight": 32902,
+    "imgCount": 32,
+    "broken": [],
+    "pending": 20,
+    "clipped": [],
+    "small": [],
+    "kb": 2085,
+    "reqs": 22,
+    "h1Size": 32,
+    "h1Font": "Times New Roman"
+  }
+]
