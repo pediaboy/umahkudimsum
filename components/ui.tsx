@@ -1,121 +1,104 @@
 "use client";
 
-import { useId, useRef, useState, useEffect, type ReactNode, type MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode, type MouseEvent as RMouseEvent } from "react";
 import Image from "next/image";
 import {
   motion,
+  useReducedMotion,
   useScroll,
   useSpring,
-  useReducedMotion,
-  AnimatePresence,
   useMotionValue,
   useTransform,
+  AnimatePresence,
 } from "framer-motion";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+export const EASE = [0.16, 1, 0.3, 1] as const;
 
-/* ------------------------------------------------------------------ */
-/* Scroll progress indicator                                           */
-/* ------------------------------------------------------------------ */
+/* ---------------- scroll progress ---------------- */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.25 });
+  const x = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.3 });
   return (
     <motion.div
       aria-hidden
-      style={{ scaleX }}
-      className="fixed inset-x-0 top-0 z-[70] h-[2px] origin-left bg-gradient-to-r from-gold-dim via-gold to-gold-light"
+      style={{ scaleX: x }}
+      className="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left bg-gradient-to-r from-brand via-brand-soft to-sun"
     />
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Scroll reveal                                                       */
-/* ------------------------------------------------------------------ */
+/* ---------------- generic reveal ---------------- */
 export function Reveal({
   children,
   delay = 0,
-  y = 26,
+  y = 24,
   className,
-  once = true,
 }: {
   children: ReactNode;
   delay?: number;
   y?: number;
   className?: string;
-  once?: boolean;
 }) {
   const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
+      initial={reduce ? false : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, margin: "-70px" }}
-      transition={{ duration: 0.85, delay, ease: EASE }}
+      viewport={{ once: true, margin: "-70px" }}
+      transition={{ duration: 0.75, delay, ease: EASE }}
     >
       {children}
     </motion.div>
   );
 }
 
-/* Staggered word-by-word text reveal (used in hero + section titles) */
+/* ---------------- staggered word reveal (descender-safe) ---------------- */
 export function RevealWords({
   text,
   className,
   delay = 0,
-  stagger = 0.055,
   as = "span",
 }: {
   text: string;
   className?: string;
   delay?: number;
-  stagger?: number;
   as?: "span" | "div";
 }) {
   const reduce = useReducedMotion();
   const words = text.split(" ");
-  const Wrapper = as === "div" ? motion.div : motion.span;
-  if (reduce) {
-    return as === "div" ? <div className={className}>{text}</div> : <span className={className}>{text}</span>;
-  }
+  const Tag = as;
+  if (reduce) return <Tag className={className}>{text}</Tag>;
   return (
-    <Wrapper
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={{ hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } }}
-    >
+    <Tag className={className}>
       {words.map((w, i) => (
         <span
-          key={i}
+          key={`${w}-${i}`}
           className="inline-block overflow-hidden align-bottom"
-          style={{ paddingBottom: "0.18em", marginBottom: "-0.18em" }}
+          style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}
         >
           <motion.span
             className="inline-block"
-            variants={{ hidden: { y: "110%" }, show: { y: 0 } }}
-            transition={{ duration: 0.9, ease: EASE }}
+            initial={{ y: "108%" }}
+            whileInView={{ y: "0%" }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.85, delay: delay + i * 0.055, ease: EASE }}
           >
             {w}
-            {i < words.length - 1 ? "\u00A0" : ""}
           </motion.span>
+          {i < words.length - 1 ? <span>&nbsp;</span> : null}
         </span>
       ))}
-    </Wrapper>
+    </Tag>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Image with clip-path masking reveal                                 */
-/* ------------------------------------------------------------------ */
+/* ---------------- image with mask reveal ---------------- */
 export function MaskImage({
   src,
   alt,
-  className,
-  imgClassName,
+  className = "",
+  imgClassName = "",
   sizes = "(max-width: 768px) 100vw, 50vw",
   priority = false,
   parallax = 0,
@@ -131,209 +114,146 @@ export function MaskImage({
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const yRaw = useTransform(scrollYProgress, [0, 1], [parallax, -parallax]);
-  const y = useSpring(yRaw, { stiffness: 90, damping: 24, mass: 0.4 });
+  const y = useTransform(scrollYProgress, [0, 1], [`-${parallax}%`, `${parallax}%`]);
 
   return (
     <motion.div
       ref={ref}
-      className={`relative overflow-hidden ${className ?? ""}`}
-      initial={reduce ? undefined : { clipPath: "inset(0 0 100% 0)" }}
-      whileInView={reduce ? undefined : { clipPath: "inset(0 0 0% 0)" }}
+      className={`relative overflow-hidden ${className}`}
+      initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
+      whileInView={{ clipPath: "inset(0 0 0% 0)" }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 1.15, ease: EASE }}
+      transition={{ duration: 0.95, ease: EASE }}
     >
-      <motion.div
-        className="absolute inset-0"
-        style={reduce || !parallax ? undefined : { y, scale: 1.12 }}
-      >
+      <motion.div style={reduce || !parallax ? undefined : { y }} className="absolute inset-0">
         <Image
           src={src}
           alt={alt}
           fill
           sizes={sizes}
           priority={priority}
-          quality={80}
-          className={`grade object-cover ${imgClassName ?? ""}`}
+          quality={84}
+          className={`object-cover ${imgClassName}`}
         />
       </motion.div>
     </motion.div>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Magnetic button / link                                              */
-/* ------------------------------------------------------------------ */
-function useMagnet(strength: number) {
+/* ---------------- magnetic button (desktop only) ---------------- */
+export function MagneticLink({
+  href,
+  children,
+  className = "",
+  external = false,
+  strength = 14,
+  ariaLabel,
+}: {
+  href: string;
+  children: ReactNode;
+  className?: string;
+  external?: boolean;
+  strength?: number;
+  ariaLabel?: string;
+}) {
   const reduce = useReducedMotion();
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const x = useSpring(mx, { stiffness: 260, damping: 20, mass: 0.35 });
-  const y = useSpring(my, { stiffness: 260, damping: 20, mass: 0.35 });
 
-  function onMouseMove(e: ReactMouseEvent<HTMLElement>) {
+  function onMove(e: RMouseEvent<HTMLAnchorElement>) {
     if (reduce) return;
     const r = e.currentTarget.getBoundingClientRect();
     mx.set(((e.clientX - (r.left + r.width / 2)) / r.width) * strength * 2);
-    my.set(((e.clientY - (r.top + r.height / 2)) / r.height) * strength * 2);
+    my.set(((e.clientY - (r.top + r.height / 2)) / r.height) * strength);
   }
-  function onMouseLeave() {
+  function reset() {
     mx.set(0);
     my.set(0);
   }
-  return { style: reduce ? undefined : { x, y }, onMouseMove, onMouseLeave };
-}
 
-export function MagneticLink({
-  children,
-  className,
-  strength = 14,
-  href,
-  ariaLabel,
-}: {
-  children: ReactNode;
-  className?: string;
-  strength?: number;
-  href: string;
-  ariaLabel?: string;
-}) {
-  const m = useMagnet(strength);
-  const external = href.startsWith("http");
   return (
     <motion.a
       href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
       aria-label={ariaLabel}
+      onMouseMove={onMove}
+      onMouseLeave={reset}
+      style={{ x: mx, y: my }}
+      transition={{ type: "spring", stiffness: 220, damping: 18, mass: 0.4 }}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={className}
-      style={m.style}
-      onMouseMove={m.onMouseMove}
-      onMouseLeave={m.onMouseLeave}
     >
       {children}
     </motion.a>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Emblem / wordmark                                                   */
-/* ------------------------------------------------------------------ */
-export function Seal({ size = 92, className = "" }: { size?: number; className?: string }) {
-  const uid = useId().replace(/:/g, "");
-  const topId = `st-${uid}`;
-  const botId = `sb-${uid}`;
-  const gradId = `sg-${uid}`;
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      width={size}
-      height={size}
-      className={className}
-      role="img"
-      aria-label="UMAHKUDIMSUM emblem"
-    >
-      <defs>
-        <path id={topId} d="M 100,100 m -80,0 a 80,80 0 1,1 160,0" fill="none" />
-        <path id={botId} d="M 100,100 m -80,0 a 80,80 0 1,0 160,0" fill="none" />
-        <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#8a7020" />
-          <stop offset="42%" stopColor="#e4c877" />
-          <stop offset="62%" stopColor="#fff6d9" />
-          <stop offset="100%" stopColor="#8a7020" />
-        </linearGradient>
-      </defs>
-      <circle cx="100" cy="100" r="95" fill="none" stroke={`url(#${gradId})`} strokeWidth="0.9" opacity="0.85" />
-      <circle cx="100" cy="100" r="68" fill="none" stroke={`url(#${gradId})`} strokeWidth="0.5" opacity="0.5" />
-      <text fill="#c9a227" fontSize="10.5" letterSpacing="4.4" fontFamily="var(--font-jost), sans-serif">
-        <textPath href={`#${topId}`} startOffset="50%" textAnchor="middle">
-          UMAHKUDIMSUM
-        </textPath>
-      </text>
-      <text fill="#8a7020" fontSize="7" letterSpacing="3.6" fontFamily="var(--font-jost), sans-serif">
-        <textPath href={`#${botId}`} startOffset="50%" textAnchor="middle">
-          EST. 2014
-        </textPath>
-      </text>
-      <text
-        x="100"
-        y="113"
-        textAnchor="middle"
-        fontSize="33"
-        fill={`url(#${gradId})`}
-        style={{ fontFamily: '"Songti SC","STSong","SimSun",serif', letterSpacing: "1px" }}
-      >
-        家點心
-      </text>
-    </svg>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Section header                                                      */
-/* ------------------------------------------------------------------ */
+/* ---------------- section heading ---------------- */
 export function SectionHead({
   index,
-  label,
+  eyebrow,
   title,
   lede,
   align = "left",
-  className = "",
+  light = false,
 }: {
-  index: string;
-  label: string;
+  index?: string;
+  eyebrow: string;
   title: string;
   lede?: string;
   align?: "left" | "center";
-  className?: string;
+  light?: boolean;
 }) {
-  const center = align === "center";
   return (
-    <div className={`${center ? "mx-auto max-w-2xl text-center" : ""} ${className}`}>
+    <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-3xl"}>
       <Reveal>
-        <div className={`flex items-center gap-4 ${center ? "justify-center" : ""}`}>
-          <span className="font-sans text-[11px] font-medium tracking-[0.3em] text-gold-dim">{index}</span>
-          <span className="h-px w-8 bg-gold/35" aria-hidden />
-          <span className="eyebrow">{label}</span>
+        <div
+          className={`flex items-center gap-3 ${align === "center" ? "justify-center" : ""}`}
+        >
+          {index ? (
+            <span className="eyebrow text-brand">{index}</span>
+          ) : null}
+          <span className={`h-px w-8 ${light ? "bg-sun/50" : "bg-brand/40"}`} />
+          <span className={`eyebrow ${light ? "text-sun" : "text-ink-soft"}`}>{eyebrow}</span>
         </div>
       </Reveal>
-      <h2 className="mt-6 font-display text-[clamp(2rem,5.2vw,3.9rem)] leading-[1.04] text-ivory">
+      <h2
+        className={`mt-5 text-[clamp(1.85rem,4.6vw,3.4rem)] leading-[1.08] font-bold ${
+          light ? "text-white" : "text-ink"
+        }`}
+      >
         <RevealWords text={title} />
       </h2>
       {lede ? (
         <Reveal delay={0.12}>
-          <p className={`mt-5 max-w-xl text-[15px] leading-relaxed text-ivory-dim ${center ? "mx-auto" : ""}`}>{lede}</p>
+          <p
+            className={`mt-5 text-[clamp(0.95rem,1.4vw,1.075rem)] leading-relaxed ${
+              light ? "text-white/75" : "text-ink-soft"
+            }`}
+          >
+            {lede}
+          </p>
         </Reveal>
       ) : null}
     </div>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Marquee                                                             */
-/* ------------------------------------------------------------------ */
-export function Marquee({
-  items,
-  className = "",
-  separator = "·",
-}: {
-  items: string[];
-  className?: string;
-  separator?: string;
-}) {
+/* ---------------- marquee ---------------- */
+export function Marquee({ items }: { items: string[] }) {
   const row = (
     <div className="flex shrink-0 items-center">
       {items.map((t, i) => (
         <span key={i} className="flex items-center whitespace-nowrap">
-          <span className="px-6 font-display text-[clamp(1.5rem,3.4vw,2.6rem)] italic text-ivory/25">{t}</span>
-          <span className="text-gold/40" aria-hidden>
-            {separator}
+          <span className="px-6 font-display text-[clamp(0.9rem,1.6vw,1.15rem)] font-semibold tracking-tight text-white/90">
+            {t}
           </span>
+          <span className="text-sun" aria-hidden>✦</span>
         </span>
       ))}
     </div>
   );
   return (
-    <div className={`relative overflow-hidden border-y border-gold/15 py-5 ${className}`} aria-hidden>
+    <div className="relative overflow-hidden border-y border-white/15 bg-brand py-3.5" aria-hidden>
       <div className="marquee-track">
         {row}
         {row}
@@ -342,70 +262,79 @@ export function Marquee({
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Cinematic intro / logo reveal (first visit per session only)         */
-/* ------------------------------------------------------------------ */
+/* ---------------- brand logo ---------------- */
+export function Logo({ size = 44, className = "" }: { size?: number; className?: string }) {
+  return (
+    <span
+      className={`relative block shrink-0 overflow-hidden rounded-full ring-2 ring-brand/15 ${className}`}
+      style={{ width: size, height: size }}
+    >
+      <Image
+        src="/brand/logo-mark.png"
+        alt="Logo UMAHKUDIMSUM"
+        fill
+        sizes={`${size}px`}
+        priority
+        className="object-cover"
+      />
+    </span>
+  );
+}
+
+/* ---------------- cinematic intro ---------------- */
 export function IntroOverlay() {
   const [show, setShow] = useState(false);
   const reduce = useReducedMotion();
+  const id = useId();
 
   useEffect(() => {
     if (reduce) return;
     try {
-      if (sessionStorage.getItem("uk-intro") === "1") return;
+      if (sessionStorage.getItem("uk-intro-v2") === "1") return;
     } catch {
       return;
     }
     setShow(true);
-    const t = window.setTimeout(() => {
+    const t = setTimeout(() => {
       try {
-        sessionStorage.setItem("uk-intro", "1");
+        sessionStorage.setItem("uk-intro-v2", "1");
       } catch {}
       setShow(false);
-    }, 2000);
-    return () => window.clearTimeout(t);
+    }, 1750);
+    return () => clearTimeout(t);
   }, [reduce]);
 
   return (
     <AnimatePresence>
-      {show && (
+      {show ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-ink"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.7, ease: EASE }}
-          aria-hidden
+          key={id}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-brand"
+          initial={{ y: 0 }}
+          exit={{ y: "-100%" }}
+          transition={{ duration: 0.8, ease: EASE }}
         >
+          <div className="wave drift absolute inset-0 opacity-40" aria-hidden />
           <motion.div
-            initial={{ opacity: 0, scale: 0.88 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, ease: EASE }}
-            className="flex flex-col items-center"
+            initial={{ scale: 0.75, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.9, ease: EASE }}
+            className="relative flex flex-col items-center gap-4"
           >
-            <Seal size={124} />
+            <span className="relative block h-20 w-20 overflow-hidden rounded-full ring-4 ring-white/25">
+              <Image src="/brand/logo-mark.png" alt="" fill sizes="80px" priority className="object-cover" />
+            </span>
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.8, ease: EASE }}
-              className="mt-6 font-sans text-[10px] tracking-[0.5em] text-gold/70"
+              transition={{ delay: 0.35, duration: 0.6, ease: EASE }}
+              className="font-display text-sm font-semibold tracking-[0.3em] text-white uppercase"
             >
               UMAHKUDIMSUM
             </motion.p>
           </motion.div>
-          <motion.div
-            className="absolute inset-x-0 top-0 h-1/2 bg-maroon"
-            initial={{ y: "0%" }}
-            exit={{ y: "-100%" }}
-            transition={{ duration: 0.85, ease: EASE, delay: 0.12 }}
-          />
-          <motion.div
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-maroon"
-            initial={{ y: "0%" }}
-            exit={{ y: "100%" }}
-            transition={{ duration: 0.85, ease: EASE, delay: 0.12 }}
-          />
         </motion.div>
-      )}
+      ) : null}
     </AnimatePresence>
   );
 }

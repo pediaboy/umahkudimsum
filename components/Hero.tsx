@@ -1,145 +1,152 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import Image from "next/image";
-import { RevealWords, MagneticLink } from "./ui";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, Star } from "lucide-react";
+import { MagneticLink, MaskImage, EASE } from "./ui";
 import { waLink } from "@/lib/format";
 import type { SiteSettings } from "@/lib/types";
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 22 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, delay, ease: EASE },
+});
 
 export default function Hero({ settings }: { settings: SiteSettings }) {
   const reduce = useReducedMotion();
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
-  const fade = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const tagline = (settings.tagline || "Authentic · Good Quality · Best Ingredients").split("·");
 
   return (
-    <section
-      id="atas"
-      ref={ref}
-      className="relative flex min-h-[100svh] items-end overflow-hidden pb-14 pt-28 md:pb-20"
-    >
-      {/* cinematic background */}
-      <motion.div className="absolute inset-0" style={reduce ? undefined : { y: imgY }}>
-        <div className="relative h-[118%] w-full">
-          <Image
-            src="/images/hero.jpg"
-            alt="Aneka dimsum dalam kantong bambu, disajikan hangat"
-            fill
-            priority
-            quality={82}
-            sizes="100vw"
-            className="grade-strong object-cover"
-          />
-        </div>
-      </motion.div>
+    <section id="home" className="relative overflow-hidden bg-brand pt-[68px] md:pt-[76px]">
+      <div className="wave drift pointer-events-none absolute inset-0 opacity-70" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "radial-gradient(120% 80% at 15% 0%, rgba(0,0,0,0.10), transparent 60%)" }}
+        aria-hidden
+      />
 
-      {/* grading + legibility overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/72 to-ink/45" aria-hidden />
-      <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_15%_100%,rgba(42,11,14,0.85),transparent_62%)]" aria-hidden />
-      <div className="absolute inset-0 grain" aria-hidden />
-
-      {/* vertical side label (desktop) */}
-      <div className="pointer-events-none absolute left-6 top-1/2 hidden -translate-y-1/2 xl:block">
-        <span className="block font-sans text-[10px] tracking-[0.5em] text-gold/45 [writing-mode:vertical-rl]">
-          LUXURY CHINESE HERITAGE
-        </span>
-      </div>
-
-      <motion.div className="shell relative z-10 w-full" style={reduce ? undefined : { y: contentY, opacity: fade }}>
-        <div className="max-w-4xl">
-          {/* eyebrow */}
+      <div className="shell relative grid items-center gap-10 py-12 md:gap-12 md:py-16 lg:grid-cols-[1.02fr_1fr] lg:gap-16 lg:py-20">
+        {/* copy */}
+        <div className="order-2 lg:order-1">
           <motion.div
-            initial={reduce ? undefined : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: EASE }}
-            className="flex flex-wrap items-center gap-3"
+            {...(reduce ? {} : fade(0.05))}
+            className="inline-flex items-center gap-2 rounded-full bg-white/12 px-3.5 py-2 backdrop-blur-sm"
           >
-            <span className="h-px w-10 bg-gold/60" aria-hidden />
-            <span className="eyebrow">Sejak 2014 · Resep Warisan Tionghoa</span>
+            <Star className="h-3.5 w-3.5 fill-sun text-sun" strokeWidth={0} />
+            <span className="font-label text-[10px] font-medium tracking-[0.18em] text-white/90 uppercase">
+              {settings.subtitle || "Produsen & Supplier Dimsum Jabodetabek"}
+            </span>
           </motion.div>
 
-          {/* headline */}
-          <h1 className="mt-6 font-display text-[clamp(2.6rem,8.4vw,6.4rem)] leading-[0.94] tracking-[-0.02em] text-ivory">
-            <span className="block">
-              <RevealWords text="Warisan rasa" />
-            </span>
-            <span className="mt-1 block italic">
-              <RevealWords text="dari dapur" delay={0.12} />
-            </span>
-            <span className="mt-1 block">
-              <span className="gold-text">
-                <RevealWords text="Tionghoa." delay={0.24} />
-              </span>
-            </span>
+          <h1 className="mt-5 font-display text-[clamp(2.35rem,6.4vw,4.5rem)] leading-[1.02] font-extrabold tracking-tight text-white">
+            {reduce ? (
+              <>
+                Dimsum rumahan,
+                <br />
+                <span className="text-sun">rasa restoran.</span>
+              </>
+            ) : (
+              <>
+                {"Dimsum rumahan,".split(" ").map((w, i) => (
+                  <span key={i} className="inline-block overflow-hidden align-bottom" style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}>
+                    <motion.span
+                      className="inline-block"
+                      initial={{ y: "110%" }}
+                      animate={{ y: "0%" }}
+                      transition={{ duration: 0.9, delay: 0.12 + i * 0.07, ease: EASE }}
+                    >
+                      {w}&nbsp;
+                    </motion.span>
+                  </span>
+                ))}
+                <br />
+                <span className="text-sun">
+                  {"rasa restoran.".split(" ").map((w, i) => (
+                    <span key={i} className="inline-block overflow-hidden align-bottom" style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}>
+                      <motion.span
+                        className="inline-block"
+                        initial={{ y: "110%" }}
+                        animate={{ y: "0%" }}
+                        transition={{ duration: 0.9, delay: 0.3 + i * 0.07, ease: EASE }}
+                      >
+                        {w}
+                      </motion.span>
+                    </span>
+                  ))}
+                </span>
+              </>
+            )}
           </h1>
 
-          {/* lede */}
           <motion.p
-            initial={reduce ? undefined : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.5, ease: EASE }}
-            className="mt-7 max-w-md text-[15px] leading-relaxed text-ivory/70 sm:text-base"
+            {...(reduce ? {} : fade(0.42))}
+            className="mt-5 max-w-md text-[clamp(0.95rem,1.5vw,1.05rem)] leading-relaxed text-white/80"
           >
-            {settings.tagline ||
-              "Racikan warisan Tionghoa, disajikan dengan hormat. Digulung tangan setiap pagi, dikukus saat dipesan."}
+            Dibuat sendiri setiap hari dengan ayam pilihan dan bahan segar. Halal, tanpa
+            pengawet, siap kukus kapan saja untuk keluarga, reseller, dan acara Anda.
           </motion.p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={reduce ? undefined : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.66, ease: EASE }}
-            className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-          >
-            <MagneticLink
-              href={waLink(settings)}
-              className="group inline-flex items-center justify-center gap-3 bg-gold px-8 py-4 font-sans text-[11px] font-medium tracking-[0.22em] text-ink uppercase transition-colors duration-300 hover:bg-gold-light"
-            >
-              Pesan Sekarang
-              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={1.6} />
-            </MagneticLink>
+          <motion.div {...(reduce ? {} : fade(0.52))} className="mt-8 flex flex-wrap items-center gap-3">
             <MagneticLink
               href="#menu"
-              className="group inline-flex items-center justify-center gap-3 border border-ivory/25 px-8 py-4 font-sans text-[11px] font-medium tracking-[0.22em] text-ivory uppercase transition-colors duration-300 hover:border-gold/60 hover:text-gold"
+              className="group inline-flex min-h-[52px] items-center gap-2 rounded-full bg-white px-7 font-sans text-sm font-bold text-brand shadow-[0_14px_30px_-12px_rgba(0,0,0,0.5)] transition-colors hover:bg-sun hover:text-ink"
             >
-              Lihat Menu
-              <span className="text-gold/70">→</span>
+              Explore Menu
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={2.4} />
             </MagneticLink>
+            <MagneticLink
+              href={waLink(settings)}
+              external
+              className="inline-flex min-h-[52px] items-center gap-2 rounded-full border-2 border-white/35 px-7 font-sans text-sm font-bold text-white transition-colors hover:border-white hover:bg-white/10"
+            >
+              Order Now
+            </MagneticLink>
+          </motion.div>
+
+          <motion.div {...(reduce ? {} : fade(0.62))} className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-2">
+            {tagline.map((t, i) => (
+              <span key={i} className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-sun" aria-hidden />
+                <span className="font-label text-[10px] font-medium tracking-[0.16em] text-white/70 uppercase">
+                  {t.trim()}
+                </span>
+              </span>
+            ))}
           </motion.div>
         </div>
 
-        {/* bottom meta strip */}
+        {/* product photo */}
         <motion.div
-          initial={reduce ? undefined : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.9 }}
-          className="mt-14 grid grid-cols-1 gap-5 border-t border-gold/15 pt-6 sm:grid-cols-3 sm:gap-8"
+          className="order-1 lg:order-2"
+          initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.15, ease: EASE }}
         >
-          <div>
-            <p className="font-sans text-[9px] tracking-[0.3em] text-gold/60 uppercase">Jam Buka</p>
-            <p className="mt-1.5 font-display text-[15px] text-ivory/85">{settings.hours_weekday}</p>
-          </div>
-          <div>
-            <p className="font-sans text-[9px] tracking-[0.3em] text-gold/60 uppercase">Lokasi</p>
-            <p className="mt-1.5 font-display text-[15px] text-ivory/85">{settings.address}</p>
-          </div>
-          <div className="flex items-end sm:justify-end">
-            <a
-              href="#signature"
-              className="group inline-flex min-h-[44px] items-center gap-2 px-1 font-sans text-[10px] tracking-[0.28em] text-ivory/50 uppercase transition-colors hover:text-gold"
+          <div className="relative mx-auto w-full max-w-[440px] lg:max-w-none">
+            <div className="absolute -inset-3 rounded-[2rem] bg-white/12" aria-hidden />
+            <MaskImage
+              src="/brand/product-ayam-web.jpg"
+              alt="Dimsum ayam UMAHKUDIMSUM dengan aneka topping"
+              priority
+              sizes="(max-width: 1024px) 90vw, 46vw"
+              className="aspect-square w-full rounded-[1.6rem] shadow-[0_30px_60px_-25px_rgba(0,0,0,0.55)]"
+            />
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.75, duration: 0.7, ease: EASE }}
+              className="absolute -bottom-4 left-4 flex items-center gap-2.5 rounded-full bg-white px-4 py-2.5 shadow-lg sm:left-6"
             >
-              Gulir
-              <ArrowDown className="h-3.5 w-3.5 animate-bounce text-gold/60" strokeWidth={1.5} />
-            </a>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand/10">
+                <Star className="h-3.5 w-3.5 fill-brand text-brand" strokeWidth={0} />
+              </span>
+              <span className="font-sans text-[12px] font-bold text-ink">
+                Halal MUI · Sejak 2014
+              </span>
+            </motion.div>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

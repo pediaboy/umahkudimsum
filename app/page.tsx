@@ -1,41 +1,47 @@
-import { getMenuPayload } from "@/lib/data";
-import { IntroOverlay, ScrollProgress } from "@/components/ui";
+import { getSiteData } from "@/lib/data";
+import { IntroOverlay, Marquee, ScrollProgress } from "@/components/ui";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import BrandIntro from "@/components/BrandIntro";
-import Signature from "@/components/Signature";
-import MenuSection from "@/components/MenuSection";
-import Story from "@/components/Story";
-import Ingredients from "@/components/Ingredients";
+import { BrandIntro, Quality } from "@/components/Story";
+import { Signature, MenuGrid } from "@/components/Products";
 import Gallery from "@/components/Gallery";
-import Testimonials from "@/components/Testimonials";
-import Order from "@/components/Order";
-import Location from "@/components/Location";
+import { Branches, Hours, Order } from "@/components/Info";
 import Footer from "@/components/Footer";
 
 export const revalidate = 300;
 
-export default async function HomePage() {
-  const { categories, items, testimonials, settings } = await getMenuPayload();
+export default async function Home() {
+  const { categories, items, branches, settings } = await getSiteData();
 
   return (
     <>
       <IntroOverlay />
       <ScrollProgress />
       <Nav settings={settings} />
+
       <main>
         <Hero settings={settings} />
-        <BrandIntro />
+        <Marquee
+          items={[
+            "Halal MUI",
+            "Dibuat sendiri setiap hari",
+            "Supplier Dimsum Jabodetabek",
+            "Free Saus Merah",
+            "Sejak 2014",
+            "Cabang Jagakarsa & Kukusan Beji",
+          ]}
+        />
+        <BrandIntro settings={settings} />
         <Signature items={items} settings={settings} />
-        <MenuSection categories={categories} items={items} settings={settings} />
-        <Story />
-        <Ingredients />
+        <MenuGrid categories={categories} items={items} settings={settings} />
+        <Quality settings={settings} />
         <Gallery />
-        <Testimonials items={testimonials} />
+        <Branches branches={branches} />
+        <Hours settings={settings} />
         <Order settings={settings} />
-        <Location settings={settings} />
       </main>
-      <Footer settings={settings} />
+
+      <Footer settings={settings} branches={branches} />
     </>
   );
 }

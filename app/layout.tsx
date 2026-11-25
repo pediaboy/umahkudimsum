@@ -1,22 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Sora, Manrope, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
+const sora = Sora({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sora",
   display: "swap",
-  preload: true,
 });
-
-const jost = Jost({
+const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-jost",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-manrope",
   display: "swap",
-  preload: true,
+});
+const dm = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-dm",
+  display: "swap",
 });
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://umahkudimsum.vercel.app";
@@ -24,64 +26,71 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://umahkudimsum.vercel.ap
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: "UMAHKUDIMSUM — Dimsum Warisan Tionghoa",
-    template: "%s · UMAHKUDIMSUM",
+    default: "UMAHKUDIMSUM — Produsen & Supplier Dimsum Jabodetabek",
+    template: "%s | UMAHKUDIMSUM",
   },
   description:
-    "UMAHKUDIMSUM — dimsum warisan Tionghoa tiga generasi. Digulung tangan setiap pagi, dikukus saat dipesan. Siomay, hakau, xiao long bao, bakpao char siu.",
+    "UMAHKUDIMSUM — produsen dan supplier dimsum halal untuk Jabodetabek. Dimsum ayam, mentai, dan goreng dengan bahan pilihan. Melayani eceran, reseller, katering, dan hampers.",
   keywords: [
-    "dimsum",
-    "umahkudimsum",
-    "dimsum jakarta",
-    "siomay",
-    "hakau",
-    "bakpao",
-    "xiao long bao",
-    "restoran tionghoa",
+    "dimsum halal", "supplier dimsum", "produsen dimsum", "dimsum Jabodetabek",
+    "dimsum Jagakarsa", "dimsum Beji", "umahkudimsum", "hampers dimsum",
   ],
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: SITE,
     siteName: "UMAHKUDIMSUM",
-    title: "UMAHKUDIMSUM — Dimsum Warisan Tionghoa",
+    title: "UMAHKUDIMSUM — Produsen & Supplier Dimsum Jabodetabek",
     description:
-      "Dimsum warisan Tionghoa tiga generasi. Digulung tangan setiap pagi, dikukus saat dipesan.",
-    images: [{ url: "/images/hero.jpg", width: 1920, height: 1080, alt: "Aneka dimsum UMAHKUDIMSUM" }],
+      "Authentic · Good Quality · Best Ingredients. Dimsum halal buatan sendiri untuk keluarga, reseller, dan acara.",
+    images: [{ url: "/brand/product-ayam-web.jpg", width: 720, height: 719, alt: "Dimsum Ayam UMAHKUDIMSUM" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "UMAHKUDIMSUM — Dimsum Warisan Tionghoa",
-    description: "Dimsum warisan Tionghoa tiga generasi. Dikukus saat dipesan.",
-    images: ["/images/hero.jpg"],
+    title: "UMAHKUDIMSUM — Produsen & Supplier Dimsum Jabodetabek",
+    description: "Authentic · Good Quality · Best Ingredients.",
+    images: ["/brand/product-ayam-web.jpg"],
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: "/" },
+  icons: { icon: "/brand/logo-mark.png", apple: "/brand/logo-mark.png" },
 };
 
 export const viewport: Viewport = {
+  themeColor: "#d81f26",
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0b0706",
-  colorScheme: "dark",
 };
 
 const JSON_LD = {
   "@context": "https://schema.org",
-  "@type": "Restaurant",
+  "@type": "FoodEstablishment",
   name: "UMAHKUDIMSUM",
-  servesCuisine: ["Chinese", "Dim Sum"],
-  priceRange: "Rp",
-  image: `${SITE}/images/hero.jpg`,
-  url: SITE,
   description:
-    "Dimsum warisan Tionghoa tiga generasi. Digulung tangan setiap pagi, dikukus saat dipesan.",
+    "Produsen dan supplier dimsum halal di Jabodetabek. Dimsum ayam, mentai, dan goreng dengan bahan pilihan.",
+  servesCuisine: "Dimsum",
+  priceRange: "Rp",
+  slogan: "Authentic · Good Quality · Best Ingredients",
+  url: SITE,
+  image: `${SITE}/brand/product-ayam-web.jpg`,
+  telephone: "+6287810136622",
+  sameAs: ["https://www.instagram.com/umahkudimsum", "https://www.tiktok.com/@umahkudimsum"],
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "16:00",
+      closes: "23:00",
+    },
+  ],
+  department: [
+    { "@type": "FoodEstablishment", name: "UMAHKUDIMSUM Cabang 001 — Jagakarsa" },
+    { "@type": "FoodEstablishment", name: "UMAHKUDIMSUM Cabang 002 — Food Court Lap. Kukusan Beji" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${cormorant.variable} ${jost.variable}`}>
-      <body className="antialiased">
+    <html lang="id" className={`${sora.variable} ${manrope.variable} ${dm.variable}`}>
+      <body>
         {children}
         <script
           type="application/ld+json"
