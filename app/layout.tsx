@@ -1,24 +1,34 @@
 import type { Metadata, Viewport } from "next";
-import { Sora, Manrope, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const sora = Sora({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+/* Self-hosted variable fonts. Fetching Google Fonts at build time made the
+   Vercel build flaky ("An error occurred in next/font"), so the woff2 files are
+   committed under app/fonts and served from our own origin — no network
+   dependency at build or runtime, and no third-party request for visitors. */
+const sora = localFont({
+  src: "./fonts/sora.woff2",
+  weight: "400 800",
+  style: "normal",
   variable: "--font-sora",
   display: "swap",
+  fallback: ["system-ui", "sans-serif"],
 });
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const manrope = localFont({
+  src: "./fonts/manrope.woff2",
+  weight: "400 700",
+  style: "normal",
   variable: "--font-manrope",
   display: "swap",
+  fallback: ["system-ui", "sans-serif"],
 });
-const dm = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const dm = localFont({
+  src: "./fonts/dmsans.woff2",
+  weight: "400 500",
+  style: "normal",
   variable: "--font-dm",
   display: "swap",
+  fallback: ["system-ui", "sans-serif"],
 });
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://umahkudimsum.vercel.app";
