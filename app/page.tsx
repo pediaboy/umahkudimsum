@@ -1,5 +1,5 @@
 import { getSiteData } from "@/lib/data";
-import { IntroOverlay, Marquee, ScrollProgress } from "@/components/ui";
+import { ScrollProgress } from "@/components/ui";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import { BrandIntro, Quality } from "@/components/Story";
@@ -15,22 +15,11 @@ export default async function Home() {
 
   return (
     <>
-      <IntroOverlay />
       <ScrollProgress />
       <Nav settings={settings} />
 
       <main>
         <Hero settings={settings} />
-        <Marquee
-          items={[
-            "Halal MUI",
-            "Dibuat sendiri setiap hari",
-            "Supplier Dimsum Jabodetabek",
-            "Free Saus Merah",
-            "Sejak 2014",
-            "Cabang Jagakarsa & Kukusan Beji",
-          ]}
-        />
         <BrandIntro settings={settings} />
         <Signature items={items} settings={settings} />
         <MenuGrid categories={categories} items={items} settings={settings} />

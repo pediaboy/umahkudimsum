@@ -1,99 +1,72 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode, type MouseEvent as RMouseEvent } from "react";
+import { useRef, useState, useEffect, type ReactNode, type MouseEvent as RMouseEvent } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useMotionValue,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 
-export const EASE = [0.16, 1, 0.3, 1] as const;
+export const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* ---------------- scroll progress ---------------- */
+/* Thin reading-progress bar. Cheap: one transform on scroll. */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
-  const x = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.3 });
+  const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.25 });
   return (
     <motion.div
       aria-hidden
-      style={{ scaleX: x }}
-      className="fixed inset-x-0 top-0 z-[70] h-[3px] origin-left bg-gradient-to-r from-brand via-brand-soft to-sun"
+      style={{ scaleX }}
+      className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-brand"
     />
   );
 }
 
-/* ---------------- generic reveal ---------------- */
+/**
+ * Scroll reveal. Purely presentational — the CSS default is visible, so a
+ * failed/absent scroll timeline can never leave content hidden.
+ */
 export function Reveal({
   children,
+  className = "",
   delay = 0,
-  y = 24,
-  className,
+  as = "div",
 }: {
   children: ReactNode;
-  delay?: number;
-  y?: number;
   className?: string;
+  delay?: number;
+  as?: "div" | "li" | "section";
 }) {
-  const reduce = useReducedMotion();
+  const Tag = as as "div";
   return (
-    <motion.div
-      className={className}
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-70px" }}
-      transition={{ duration: 0.75, delay, ease: EASE }}
-    >
+    <Tag className={`reveal ${className}`} style={{ animationDelay: delay ? `${delay}s` : undefined }}>
       {children}
-    </motion.div>
-  );
-}
-
-/* ---------------- staggered word reveal (descender-safe) ---------------- */
-export function RevealWords({
-  text,
-  className,
-  delay = 0,
-  as = "span",
-}: {
-  text: string;
-  className?: string;
-  delay?: number;
-  as?: "span" | "div";
-}) {
-  const reduce = useReducedMotion();
-  const words = text.split(" ");
-  const Tag = as;
-  if (reduce) return <Tag className={className}>{text}</Tag>;
-  return (
-    <Tag className={className}>
-      {words.map((w, i) => (
-        <span
-          key={`${w}-${i}`}
-          className="inline-block overflow-hidden align-bottom"
-          style={{ paddingBottom: "0.16em", marginBottom: "-0.16em" }}
-        >
-          <motion.span
-            className="inline-block"
-            initial={{ y: "108%" }}
-            whileInView={{ y: "0%" }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.85, delay: delay + i * 0.055, ease: EASE }}
-          >
-            {w}
-          </motion.span>
-          {i < words.length - 1 ? <span>&nbsp;</span> : null}
-        </span>
-      ))}
     </Tag>
   );
 }
 
-/* ---------------- image with mask reveal ---------------- */
+/** Word-by-word headline entrance. Runs once on load and always ends visible. */
+export function RevealWords({
+  text,
+  className = "",
+  wordClassName = "",
+}: {
+  text: string;
+  className?: string;
+  wordClassName?: string;
+}) {
+  return (
+    <span className={className}>
+      {text.split(" ").map((w, i) => (
+        <span key={`${w}-${i}`} className="inline-block overflow-hidden align-bottom" style={{ paddingBottom: "0.14em", marginBottom: "-0.14em" }}>
+          <span className={`intro-word inline-block ${wordClassName}`} style={{ ["--i" as string]: i }}>
+            {w}
+          </span>
+          {i < text.split(" ").length - 1 ? "\u00A0" : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/** Image with a scroll-driven mask reveal. Visible by default. */
 export function MaskImage({
   src,
   alt,
@@ -101,7 +74,7 @@ export function MaskImage({
   imgClassName = "",
   sizes = "(max-width: 768px) 100vw, 50vw",
   priority = false,
-  parallax = 0,
+  quality = 82,
 }: {
   src: string;
   alt: string;
@@ -109,77 +82,69 @@ export function MaskImage({
   imgClassName?: string;
   sizes?: string;
   priority?: boolean;
+  quality?: number;
   parallax?: number;
 }) {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [`-${parallax}%`, `${parallax}%`]);
-
   return (
-    <motion.div
-      ref={ref}
-      className={`relative overflow-hidden ${className}`}
-      initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
-      whileInView={{ clipPath: "inset(0 0 0% 0)" }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.95, ease: EASE }}
-    >
-      <motion.div style={reduce || !parallax ? undefined : { y }} className="absolute inset-0">
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes={sizes}
-          priority={priority}
-          quality={84}
-          className={`object-cover ${imgClassName}`}
-        />
-      </motion.div>
-    </motion.div>
+    <div className={`reveal-mask relative overflow-hidden ${className}`}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        priority={priority}
+        quality={quality}
+        className={`object-cover ${imgClassName}`}
+      />
+    </div>
   );
 }
 
-/* ---------------- magnetic button (desktop only) ---------------- */
+/** Desktop-only magnetic pull. No-ops on touch and reduced motion. */
 export function MagneticLink({
   href,
   children,
   className = "",
-  external = false,
-  strength = 14,
-  ariaLabel,
+  strength = 12,
+  target,
+  rel,
+  onClick,
+  external,
 }: {
   href: string;
   children: ReactNode;
   className?: string;
-  external?: boolean;
   strength?: number;
-  ariaLabel?: string;
+  target?: string;
+  rel?: string;
+  onClick?: () => void;
+  external?: boolean;
 }) {
+  const ref = useRef<HTMLAnchorElement>(null);
   const reduce = useReducedMotion();
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
+  const [d, setD] = useState({ x: 0, y: 0 });
 
-  function onMove(e: RMouseEvent<HTMLAnchorElement>) {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    mx.set(((e.clientX - (r.left + r.width / 2)) / r.width) * strength * 2);
-    my.set(((e.clientY - (r.top + r.height / 2)) / r.height) * strength);
-  }
-  function reset() {
-    mx.set(0);
-    my.set(0);
+  function move(e: RMouseEvent<HTMLAnchorElement>) {
+    if (reduce || !ref.current) return;
+    if (window.matchMedia("(hover: none)").matches) return;
+    const r = ref.current.getBoundingClientRect();
+    setD({
+      x: ((e.clientX - (r.left + r.width / 2)) / r.width) * strength * 2,
+      y: ((e.clientY - (r.top + r.height / 2)) / r.height) * strength * 2,
+    });
   }
 
   return (
     <motion.a
+      ref={ref}
       href={href}
-      aria-label={ariaLabel}
-      onMouseMove={onMove}
-      onMouseLeave={reset}
-      style={{ x: mx, y: my }}
+      target={target}
+      rel={rel}
+      onClick={onClick}
+      onMouseMove={move}
+      onMouseLeave={() => setD({ x: 0, y: 0 })}
+      animate={{ x: d.x, y: d.y }}
       transition={{ type: "spring", stiffness: 220, damping: 18, mass: 0.4 }}
-      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={className}
     >
       {children}
@@ -187,154 +152,114 @@ export function MagneticLink({
   );
 }
 
-/* ---------------- section heading ---------------- */
+/** Editorial section header: small label, big display line, optional lede. */
 export function SectionHead({
-  index,
-  eyebrow,
+  label,
   title,
   lede,
   align = "left",
-  light = false,
+  invert = false,
+  className = "",
 }: {
-  index?: string;
-  eyebrow: string;
+  label: string;
   title: string;
   lede?: string;
   align?: "left" | "center";
-  light?: boolean;
+  invert?: boolean;
+  className?: string;
 }) {
+  const centred = align === "center";
   return (
-    <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-3xl"}>
-      <Reveal>
-        <div
-          className={`flex items-center gap-3 ${align === "center" ? "justify-center" : ""}`}
-        >
-          {index ? (
-            <span className="eyebrow text-brand">{index}</span>
-          ) : null}
-          <span className={`h-px w-8 ${light ? "bg-sun/50" : "bg-brand/40"}`} />
-          <span className={`eyebrow ${light ? "text-sun" : "text-ink-soft"}`}>{eyebrow}</span>
-        </div>
-      </Reveal>
+    <div className={`${centred ? "mx-auto max-w-2xl text-center" : "max-w-3xl"} ${className}`}>
+      <p className={`label ${invert ? "text-sun" : "text-brand"}`}>{label}</p>
       <h2
-        className={`mt-5 text-[clamp(1.85rem,4.6vw,3.4rem)] leading-[1.08] font-bold ${
-          light ? "text-white" : "text-ink"
+        className={`mt-4 text-[clamp(1.9rem,4.2vw,3.1rem)] leading-[1.06] font-semibold ${
+          invert ? "text-white" : "text-ink"
         }`}
       >
-        <RevealWords text={title} />
+        {title}
       </h2>
       {lede ? (
-        <Reveal delay={0.12}>
-          <p
-            className={`mt-5 text-[clamp(0.95rem,1.4vw,1.075rem)] leading-relaxed ${
-              light ? "text-white/75" : "text-ink-soft"
-            }`}
-          >
-            {lede}
-          </p>
-        </Reveal>
+        <p
+          className={`mt-5 text-[15px] leading-[1.75] sm:text-base ${
+            invert ? "text-white/75" : "text-ink-soft"
+          }`}
+        >
+          {lede}
+        </p>
       ) : null}
     </div>
   );
 }
 
-/* ---------------- marquee ---------------- */
+/** Animated marquee. Kept for the brand strip; pauses on reduced motion. */
 export function Marquee({ items }: { items: string[] }) {
-  const row = (
-    <div className="flex shrink-0 items-center">
-      {items.map((t, i) => (
-        <span key={i} className="flex items-center whitespace-nowrap">
-          <span className="px-6 font-display text-[clamp(0.9rem,1.6vw,1.15rem)] font-semibold tracking-tight text-white/90">
-            {t}
-          </span>
-          <span className="text-sun" aria-hidden>✦</span>
-        </span>
-      ))}
-    </div>
-  );
   return (
-    <div className="relative overflow-hidden border-y border-white/15 bg-brand py-3.5" aria-hidden>
-      <div className="marquee-track">
-        {row}
-        {row}
+    <div className="relative overflow-hidden border-y border-line bg-cream py-4" aria-hidden>
+      <div className="uk-marquee flex w-max">
+        {[0, 1].map((k) => (
+          <div key={k} className="flex shrink-0">
+            {items.map((t) => (
+              <span key={`${k}-${t}`} className="flex items-center whitespace-nowrap">
+                <span className="label px-6 text-ink-soft">{t}</span>
+                <span className="h-1 w-1 rounded-full bg-brand/40" />
+              </span>
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
-/* ---------------- brand logo ---------------- */
 export function Logo({ size = 44, className = "" }: { size?: number; className?: string }) {
   return (
     <span
-      className={`relative block shrink-0 overflow-hidden rounded-full ring-2 ring-brand/15 ${className}`}
+      className={`relative inline-block shrink-0 overflow-hidden rounded-full ring-1 ring-line ${className}`}
       style={{ width: size, height: size }}
     >
-      <Image
-        src="/brand/logo-mark.png"
-        alt="Logo UMAHKUDIMSUM"
-        fill
-        sizes={`${size}px`}
-        priority
-        className="object-cover"
-      />
+      <Image src="/brand/logo-mark.png" alt="UMAHKUDIMSUM" fill sizes={`${size}px`} className="object-cover" priority />
     </span>
   );
 }
 
-/* ---------------- cinematic intro ---------------- */
+/** One-time brand curtain. Short and non-blocking; skipped on reduced motion. */
 export function IntroOverlay() {
-  const [show, setShow] = useState(false);
   const reduce = useReducedMotion();
-  const id = useId();
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (reduce) return;
     try {
-      if (sessionStorage.getItem("uk-intro-v2") === "1") return;
+      if (sessionStorage.getItem("uk-intro") === "1") return;
     } catch {
       return;
     }
     setShow(true);
     const t = setTimeout(() => {
-      try {
-        sessionStorage.setItem("uk-intro-v2", "1");
-      } catch {}
+      try { sessionStorage.setItem("uk-intro", "1"); } catch {}
       setShow(false);
-    }, 1750);
+    }, 900);
     return () => clearTimeout(t);
   }, [reduce]);
 
+  if (!show) return null;
   return (
-    <AnimatePresence>
-      {show ? (
-        <motion.div
-          key={id}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-brand"
-          initial={{ y: 0 }}
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          <div className="wave drift absolute inset-0 opacity-40" aria-hidden />
-          <motion.div
-            initial={{ scale: 0.75, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.9, ease: EASE }}
-            className="relative flex flex-col items-center gap-4"
-          >
-            <span className="relative block h-20 w-20 overflow-hidden rounded-full ring-4 ring-white/25">
-              <Image src="/brand/logo-mark.png" alt="" fill sizes="80px" priority className="object-cover" />
-            </span>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.6, ease: EASE }}
-              className="font-display text-sm font-semibold tracking-[0.3em] text-white uppercase"
-            >
-              UMAHKUDIMSUM
-            </motion.p>
-          </motion.div>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+    <motion.div
+      aria-hidden
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 0 }}
+      transition={{ duration: 0.5, delay: 0.55, ease: EASE }}
+      className="pointer-events-none fixed inset-0 z-[90] flex items-center justify-center bg-brand"
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: EASE }}
+        className="rounded-full bg-white p-3"
+      >
+        <Logo size={64} />
+      </motion.div>
+    </motion.div>
   );
 }

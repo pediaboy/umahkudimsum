@@ -1,121 +1,137 @@
 @import "tailwindcss";
 
 @theme {
-  /* UMAHKUDIMSUM brand palette — merah utama, kuning logo/aksen, putih & cream */
+  /* UMAHKUDIMSUM — merah utama, kuning logo/aksen, putih & cream pendukung */
   --color-brand: #d81f26;
   --color-brand-deep: #a81419;
   --color-brand-soft: #f0453f;
   --color-sun: #ffc629;
   --color-sun-soft: #ffd75e;
   --color-cream: #fff8ee;
-  --color-cream-deep: #fdeedd;
-  --color-ink: #23110e;
+  --color-cream-deep: #f7ead9;
+  --color-ink: #1f1310;
   --color-ink-soft: #6b5a55;
-  --color-line: #efe2d6;
+  --color-line: #ece0d4;
 
-  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-label: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
-
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-display: var(--font-sora), system-ui, sans-serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-label: var(--font-dm), system-ui, sans-serif;
 }
 
 @layer base {
-  * { -webkit-tap-highlight-color: transparent; }
-
   html {
-    scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-    }
   }
-
   body {
-    background: var(--color-cream);
+    background: #ffffff;
     color: var(--color-ink);
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     overflow-x: hidden;
   }
-
-  ::selection { background: var(--color-sun); color: var(--color-ink); }
-
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  ::selection { background: var(--color-brand); color: #fff; }
 }
 
 @layer components {
   .shell {
     width: 100%;
-    max-width: 80rem;
+    max-width: 78rem;
     margin-inline: auto;
-    padding-inline: clamp(1.15rem, 4.5vw, 4rem);
+    padding-inline: clamp(1.25rem, 5vw, 4.5rem);
   }
-  .shell-narrow {
+  .shell-tight {
     width: 100%;
-    max-width: 56rem;
+    max-width: 52rem;
     margin-inline: auto;
-    padding-inline: clamp(1.15rem, 4.5vw, 4rem);
+    padding-inline: clamp(1.25rem, 5vw, 4.5rem);
   }
-
-  /* brand wave pattern — repeating scalloped arcs, like the IG material */
+  /* brand motif: repeating scalloped wave, used sparingly and at low opacity */
   .wave {
-    background-image: radial-gradient(
-      circle at 50% 0%,
-      rgba(255, 255, 255, 0.10) 0 42%,
-      transparent 43%
-    );
-    background-size: 68px 34px;
+    background-image: radial-gradient(circle at 50% 0, currentColor 22%, transparent 23%);
+    background-size: 56px 28px;
     background-position: 0 0;
   }
-  .wave-dark {
-    background-image: radial-gradient(
-      circle at 50% 0%,
-      rgba(216, 31, 38, 0.06) 0 42%,
-      transparent 43%
-    );
-    background-size: 68px 34px;
-  }
-
-  .eyebrow {
+  .rule { height: 1px; background: var(--color-line); }
+  .label {
     font-family: var(--font-label);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
+    font-size: 11px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-  }
-
-  .rule {
-    height: 1px;
-    background: var(--color-line);
+    font-weight: 500;
   }
 }
 
-/* marquee */
+/* ------------------------------------------------------------------ *
+ * Reveal system — pure CSS, scroll-driven.
+ *
+ * The previous build animated clip-path/opacity from JS (framer-motion
+ * whileInView). On slower phones hydration lagged and images stayed at
+ * clip-path: inset(0 0 100%) — permanently invisible. Now the DEFAULT
+ * state is fully visible, and the animation is only layered on where
+ * the browser supports scroll timelines. If anything is unsupported,
+ * unsupported, content simply shows. Nothing can be hidden by a failed
+ * observer.
+ * ------------------------------------------------------------------ */
+@keyframes uk-reveal-up {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes uk-reveal-mask {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0% 0); }
+}
+@keyframes uk-intro-word {
+  from { opacity: 0; transform: translate3d(0, 0.5em, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal,
+    .reveal-mask {
+      animation: uk-reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 52%;
+    }
+    .reveal-mask {
+      animation-name: uk-reveal-mask;
+      animation-range: entry 5% entry 45%;
+    }
+  }
+  /* hero entrance: runs once on load and always ends visible */
+  .intro-word {
+    animation: uk-intro-word 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+
+/* hover polish — transform only, cheap on mobile GPUs */
+.card-media img {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) {
+  .card-media:hover img { transform: scale(1.045); }
+}
+
+/* thin scrollbar for the menu rail */
+.rail { scrollbar-width: none; -ms-overflow-style: none; }
+.rail::-webkit-scrollbar { display: none; }
+
 @keyframes uk-marquee {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-50%, 0, 0); }
 }
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: uk-marquee 34s linear infinite;
-  will-change: transform;
-}
+.uk-marquee { animation: uk-marquee 34s linear infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
-}
-
-/* slow drift for the hero pattern */
-@keyframes uk-drift {
-  from { background-position: 0 0; }
-  to   { background-position: 136px 68px; }
-}
-.drift { animation: uk-drift 40s linear infinite; }
-@media (prefers-reduced-motion: reduce) {
-  .drift { animation: none; }
+  .uk-marquee { animation: none; }
 }
