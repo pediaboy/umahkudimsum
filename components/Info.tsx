@@ -204,7 +204,7 @@ export function Order({ settings }: { settings: SiteSettings }) {
                   href={settings.linktree}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-brand hover:underline"
+                  className="inline-flex min-h-[44px] items-center font-semibold text-brand hover:underline"
                 >
                   msha.ke/umahkudimsum
                 </a>
